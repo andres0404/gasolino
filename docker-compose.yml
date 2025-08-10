@@ -50,7 +50,7 @@ services:
   ollama:
     image: ollama/ollama
     volumes:
-      - ~/platzi/php/fundamentos/ai/.ollama:/root/.ollama
+      - .ollama:/root/.ollama
     container_name: ollama
     ports:
       - "11434:11434"
