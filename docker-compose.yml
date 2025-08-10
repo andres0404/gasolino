@@ -47,6 +47,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+
   ollama:
     image: ollama/ollama
     volumes:
@@ -54,4 +55,15 @@ services:
     container_name: ollama
     ports:
       - "11434:11434"
-    
+
+
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
