@@ -64,6 +64,13 @@ services:
       - '80:80'
       - '443:443'
       - '81:81'
+      - '8000:8000'
+      - '8001:8001'
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
+  landing-page:
+    image: nginx:alpine
+    restart: unless-stopped
+    volumes:
+      - ./landing-page:/usr/share/nginx/html
