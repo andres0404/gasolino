@@ -19,9 +19,24 @@
     body {
       margin: 0;
       font-family: 'Roboto', Arial, sans-serif;
-      background: linear-gradient(174deg, #1A1A14 0%, #162161 50%, #0F0F11 100%);
+      
       color: var(--white);
       min-height: 100vh;
+      animation: rotate-bg-color 10s infinite;
+    }
+    @keyframes rotate-bg-color {
+      0% {
+        background: linear-gradient(174deg, #1A1A14 0%, #162161 50%, #0F0F11 100%);
+      }
+      33% {
+        background: linear-gradient(174deg, #0e0e0a 0%, #1a266e 50%, #18181b 100%);
+      }
+      66% {
+        background: linear-gradient(174deg, #1a1a11 0%, #0c1b74 50%, #202029 100%);
+      }
+      100% {
+        background: linear-gradient(174deg, #333327 0%, #182050 50%, #2e2e35 100%);
+      }
     }
     .container {
       display: flex;
@@ -199,7 +214,7 @@
       padding-left: 3em;
     }
     .hero-image img {
-      max-width: 100%;
+      max-width: 60%;
       height: auto;
       border-radius: 20px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.3);
@@ -305,12 +320,12 @@
   <div class="hero-section">
     <div class="hero-image">
       <!-- Aquí puedes colocar la imagen del móvil con Telegram abierto -->
-      <img src="telegram_phone.png" alt="Móvil con Telegram abierto" />
+      <img src="telegram_phone1.png" alt="Móvil con Telegram abierto" />
     </div>
     <div class="hero-content">
       <div class="header">
-        <h1 class="hero-title">Gasolino</h1>
-        <div class="logo-placeholder"><img src="gasolino.png" class="img-gasolino" alt="Gasolino"></div>
+        <a href="https://t.me/Gasolino_bot" target="_blank"  class="footer-link"><h1 class="hero-title">Gasolino</h1></a>
+        <div class="logo-placeholder"><a href="https://t.me/Gasolino_bot" target="_blank" class="footer-link"><img src="gasolino.png" class="img-gasolino" alt="Gasolino"></a></div>
       </div>
       
       <p class="hero-subtitle">Controla tu consumo de gasolina de forma inteligente y sencilla con nuestro bot de Telegram</p>
@@ -319,7 +334,12 @@
   <div class="container">
     <div class="left">
       <div class="telegram-chat">
-        <div class="chat-header"><div class="chat-header-text"><div class="chat-header-avatar"><img src="gasolino.png" class="img-gasolino" alt="Gasolino"></div>Gasolino Bot</div></div>
+        <div class="chat-header">
+          <div class="chat-header-text"><div class="chat-header-avatar">
+            <img src="gasolino.png" class="img-gasolino" alt="Gasolino">
+          </div><a href="https://t.me/Gasolino_bot" target="_blank" class="footer-link">Gasolino Bot</a>
+        </div>
+      </div>
         <div class="chat-messages">
           <!-- Aquí puedes agregar burbujas de chat hardcoreadas -->
           <div class="chat-bubble from-user">¡Hola Gasolino! Hoy he tanqueado mi carro con 3 galones por 60000 pesos.</div>
@@ -341,7 +361,7 @@
       <div class="section-title">¿Cómo empezar?</div>
       <ul class="steps">
         <li><span class="step-number">1</span>Descarga Telegram en tu dispositivo móvil o computadora.</li>
-        <li><span class="step-number">2</span>Busca el chat&nbsp;<strong>Gasolino_bot</strong>&nbsp;en Telegram.</li>
+        <li><span class="step-number">2</span>Busca el chat&nbsp;<strong><a href="https://t.me/Gasolino_bot" target="_blank" class="footer-link">Gasolino_bot <i class="bi bi-telegram footer-icon"></i></a></strong>&nbsp;en Telegram.</li>
         <li><span class="step-number">3</span>Haz clic en &nbsp;<b>Iniciar</b>&nbsp; para comenzar a usar el bot.</li>
         <li><span class="step-number">4</span>Empieza a registrar y consultar tu consumo de gasolina en lenguaje natural.</li>
       </ul>
@@ -351,15 +371,15 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-section">
-        <span>Andres Silva</span>
         <a href="http://www.linkedin.com/in/andres-silva-vega-silva-b48016a6" target="_blank" class="footer-link">
+          <span>Andres Silva</span>
           <i class="bi bi-linkedin footer-icon"></i>
         </a>
       </div>
       
       <div class="footer-section">
-        <span>Soporte</span>
         <a href="mailto:soporte@gasolino.com" class="footer-link">
+          <span>Soporte</span>
           <i class="bi bi-envelope footer-icon"></i>
         </a>
       </div>
