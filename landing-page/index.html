@@ -3,400 +3,763 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gasolino - Controla tu consumo de gasolina</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="description" content="Gasolino: Bot de Telegram para controlar tu consumo mensual de gasolina. Registra tanqueos en lenguaje natural y obtén resúmenes detallados de gastos. ¡Controla tus finanzas de combustible de forma inteligente!">
+  <meta name="keywords" content="gasolina, consumo, bot telegram, control gastos, tanqueo, combustible, ahorro, finanzas personales, colombia">
+  <meta name="author" content="Andres Silva">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="Spanish">
+  <meta name="revisit-after" content="7 days">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://gasolino.com/">
+  <meta property="og:title" content="Gasolino - Controla tu consumo de gasolina">
+  <meta property="og:description" content="Bot de Telegram para controlar tu consumo mensual de gasolina. Registra tanqueos en lenguaje natural y obtén resúmenes detallados.">
+  <meta property="og:image" content="./gasolino.png">
+  <meta property="og:site_name" content="Gasolino">
+  <meta property="og:locale" content="es_CO">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://gasolino.com/">
+  <meta property="twitter:title" content="Gasolino - Controla tu consumo de gasolina">
+  <meta property="twitter:description" content="Bot de Telegram para controlar tu consumo mensual de gasolina. Registra tanqueos en lenguaje natural y obtén resúmenes detallados.">
+  <meta property="twitter:image" content="./gasolino.png">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://gasolino.com/">
+  
+  <title>Gasolino - Controla tu consumo de gasolina | Bot de Telegram</title>
+  <link rel="icon" type="image/png" href="./gasolino.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" rel="stylesheet">
   <style>
     :root {
-      --dark-bg: #181818;
-      --darker-bg: #101010;
+      --dark-bg: #0a0a0a;
+      --darker-section: #111111;
+      --card-bg: #1a1a1a;
       --yellow: #FFD600;
       --red: #FF1744;
-      --white: #fff;
-      --gray: #333;
+      --white: #ffffff;
+      --gray: #333333;
+      --light-gray: #888888;
       --telegram-blue: #229ED9;
+      --gradient-primary: linear-gradient(135deg, #FFD600 0%, #FFA000 100%);
+      --gradient-secondary: linear-gradient(135deg, #FF1744 0%, #D50000 100%);
+      --shadow-primary: 0 8px 32px rgba(255, 214, 0, 0.15);
+      --shadow-secondary: 0 8px 32px rgba(255, 23, 68, 0.15);
     }
-    body {
+
+    * {
       margin: 0;
-      font-family: 'Roboto', Arial, sans-serif;
-      
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--dark-bg);
       color: var(--white);
-      min-height: 100vh;
-      animation: rotate-bg-color 10s infinite;
+      line-height: 1.6;
+      overflow-x: hidden;
     }
-    @keyframes rotate-bg-color {
-      0% {
-        background: linear-gradient(174deg, #1A1A14 0%, #162161 50%, #0F0F11 100%);
-      }
-      33% {
-        background: linear-gradient(174deg, #0e0e0a 0%, #1a266e 50%, #18181b 100%);
-      }
-      66% {
-        background: linear-gradient(174deg, #1a1a11 0%, #0c1b74 50%, #202029 100%);
-      }
-      100% {
-        background: linear-gradient(174deg, #333327 0%, #182050 50%, #2e2e35 100%);
-      }
-    }
+
     .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(26, 26, 26, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid var(--yellow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 1rem 0;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-primary);
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .bot-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px rgba(255, 214, 0, 0.3);
+    }
+
+    /* Hero Section */
+    .hero {
       display: flex;
       flex-direction: row;
-      min-height: 60vh;
-      margin: 0 auto 0 auto;
-      max-width: 1100px;
-      border-radius: 18px;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.4);
+      gap: 4rem;
+      padding: 6rem 0;
+      align-items: center;
+      min-height: 80vh;
+    }
+
+    .hero-image {
+      text-align: center;
+      flex: 1;
+    }
+
+    .hero-image img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 25px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      transition: all 0.4s ease;
+    }
+
+    .hero-image img:hover {
+      transform: translateY(-15px) scale(1.02);
+      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-content {
+      flex: 1;
+    }
+
+    .hero-content h2 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+
+    .hero-content p {
+      font-size: 1.3rem;
+      color: var(--light-gray);
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: var(--gradient-primary);
+      color: var(--dark-bg);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-primary);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(255, 214, 0, 0.3);
+    }
+
+    /* Chat Section */
+    .chat-section {
+      background: var(--darker-section);
+      border-radius: 25px;
+      padding: 4rem;
+      margin: 6rem 0;
+      border: 2px solid var(--yellow);
+      box-shadow: var(--shadow-primary);
+      position: relative;
       overflow: hidden;
     }
-    .left {
-      flex: 1.1;
-      padding: 32px 24px 24px 24px;
-      display: flex;
-      flex-direction: column;
-      border-right: 2px solid var(--yellow);
-      min-width: 320px;
-    }
-    .telegram-chat {
-      background: #222c37;
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(34,158,217,0.08);
-      padding: 18px 12px 12px 12px;
-      min-height: 420px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      position: relative;
-    }
-    .chat-header {
+
+    .chat-section::before {
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 44px;
-      background: var(--telegram-blue);
-      border-radius: 16px 16px 0 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-primary);
+    }
+
+    .chat-container {
+      max-width: 455px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .chat-header {
+      background: var(--gradient-secondary);
+      padding: 1.5rem;
       display: flex;
       align-items: center;
-      color: var(--white);
-      font-weight: bold;
-      font-size: 1.1em;
-      letter-spacing: 1px;
+      gap: 1rem;
     }
-    .chat-header-text {
-      padding-left: 16px;
-      display: flex;
-      align-items: center;
-    }
-    .chat-header-avatar {
-      width: 30px;
-      height: 30px;
-      background-color: yellow;
-      display: inline-block;
+
+    .chat-avatar {
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
-      margin-right: 10px;
-    }
-    .chat-messages {
-      margin-top: 48px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .chat-bubble {
-      max-width: 80%;
-      padding: 10px 16px;
-      border-radius: 18px;
-      font-size: 1em;
-      line-height: 1.5;
-      margin-bottom: 2px;
-      word-break: break-word;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
-    .from-user {
-      align-self: flex-end;
       background: var(--yellow);
-      color: var(--gray);
-      border-bottom-right-radius: 4px;
-    }
-    .from-bot {
-      align-self: flex-start;
-      background: var(--red);
-      color: var(--white);
-      border-bottom-left-radius: 4px;
-    }
-    .right {
-      flex: 2;
-      padding: 32px 40px 24px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      position: relative;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      margin-bottom: 24px;
-    }
-    .logo-placeholder {
-      width: 48px;
-      height: 48px;
-      background: var(--yellow);
-      border-radius: 50%;
-      margin-left: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5em;
-      color: var(--gray);
-      font-weight: bold;
-      box-shadow: 0 2px 8px rgba(255,214,0,0.15);
-      
+      box-shadow: 0 4px 15px rgba(255, 214, 0, 0.3);
     }
-    h1 {
-      font-size: 2.2em;
-      font-weight: 700;
-      margin: 0;
-      color: var(--yellow);
-      letter-spacing: 1px;
+
+    .chat-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
     }
-    .description {
-      font-size: 1.18em;
-      margin-bottom: 32px;
+
+    .chat-title {
       color: var(--white);
-      line-height: 1.6;
+      font-weight: 600;
+      font-size: 1.2rem;
     }
+
+    .chat-messages {
+      padding: 2rem;
+      min-height: 350px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      background: linear-gradient(180deg, #1a1a1a 0%, #222 100%);
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 1rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      position: relative;
+      animation: messageSlide 0.5s ease-out;
+    }
+
+    @keyframes messageSlide {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: var(--gradient-primary);
+      color: var(--dark-bg);
+      border-bottom-right-radius: 5px;
+      box-shadow: 0 4px 15px rgba(255, 214, 0, 0.2);
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      background: var(--gradient-secondary);
+      color: var(--white);
+      border-bottom-left-radius: 5px;
+      box-shadow: 0 4px 15px rgba(255, 23, 68, 0.2);
+    }
+
+    /* Content Section */
+    .content-section {
+      padding: 6rem 0;
+    }
+
     .section-title {
-      color: var(--red);
-      font-size: 1.3em;
+      font-size: 3rem;
       font-weight: 700;
-      margin-top: 36px;
-      margin-bottom: 12px;
-      letter-spacing: 1px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+      margin-bottom: 4rem;
+      text-shadow: 0 0 30px rgba(255, 214, 0, 0.3);
     }
+
+    .description {
+      font-size: 1.3rem;
+      color: var(--light-gray);
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 4rem auto;
+      line-height: 1.8;
+    }
+
+    .how-to-start {
+      background: var(--darker-section);
+      border-radius: 25px;
+      padding: 4rem;
+      border: 2px solid var(--red);
+      box-shadow: var(--shadow-secondary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .how-to-start::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--gradient-secondary);
+    }
+
     .steps {
       list-style: none;
-      padding: 0;
-      margin: 0 0 0 8px;
+      counter-reset: step-counter;
     }
+
     .steps li {
-      margin-bottom: 14px;
-      font-size: 1.08em;
+      counter-increment: step-counter;
       display: flex;
       align-items: flex-start;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
+
+    .steps li:hover {
+      transform: translateX(15px);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 214, 0, 0.2);
+    }
+
     .step-number {
-      background: var(--yellow);
-      color: var(--gray);
-      font-weight: bold;
+      background: var(--gradient-primary);
+      color: var(--dark-bg);
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
-      min-width: 28px;
-      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 14px;
-      font-size: 1em;
-      box-shadow: 0 1px 4px rgba(255,214,0,0.10);
+      font-weight: bold;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-primary);
     }
-    .hero-section {
+
+    .step-number::before {
+      content: counter(step-counter);
+    }
+
+    .step-content {
+      flex: 1;
+      font-size: 1.2rem;
+      color: var(--white);
+      line-height: 1.7;
+    }
+
+    .step-content strong {
+      color: var(--yellow);
+      font-weight: 600;
+    }
+
+    /* Features Section */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 4rem 0;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 20px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--yellow);
+      box-shadow: var(--shadow-primary);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      color: var(--yellow);
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    .feature-description {
+      color: var(--light-gray);
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--darker-section);
+      padding: 4rem 0;
+      margin-top: 6rem;
+      border-top: 2px solid var(--yellow);
+      position: relative;
+    }
+
+    .footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient-primary);
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .footer-section {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      max-width: 1100px;
-      margin: 60px auto 0 auto;
-      padding: 0 20px;
-    }
-    .hero-image {
-      flex: 1;
-      max-width: 300px;
-      text-align: center;
-      padding-left: 3em;
-    }
-    .hero-image img {
-      max-width: 60%;
-      height: auto;
-      border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    }
-    .hero-content {
-      flex: 1;
-      padding-left: 80px;
-    }
-    .hero-title {
-      font-size: 3.5em;
-      font-weight: 700;
-      margin: 0 0 20px 0;
-      color: var(--yellow);
-      letter-spacing: 2px;
-      text-shadow: 0 2px 8px rgba(255,214,0,0.3);
-    }
-    .hero-subtitle {
-      font-size: 1.4em;
+      gap: 0.75rem;
       color: var(--white);
-      line-height: 1.6;
-      margin: 0;
+      font-size: 1rem;
     }
-    @media (max-width: 900px) {
-      .container {
-        flex-direction: column;
-        max-width: 98vw;
+
+    .footer-link {
+      text-decoration: none;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .footer-link:hover {
+      color: var(--yellow);
+      background: rgba(255, 214, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .footer-icon {
+      font-size: 1.2rem;
+      color: var(--white);
+      transition: color 0.3s ease;
+    }
+
+    .footer-link:hover .footer-icon {
+      color: var(--yellow);
+    }
+
+    /* Responsive */
+          @media (max-width: 768px) {
+        .hero {
+          flex-direction: column;
+          gap: 3rem;
+          text-align: center;
+          padding: 4rem 0;
+        }
+
+      .hero-content h2 {
+        font-size: 2.8rem;
       }
-      .right, .left {
-        padding: 24px 12px;
+
+      .bot-title {
+        font-size: 2rem;
       }
-      .right {
-        min-width: 0;
+
+      .chat-section {
+        padding: 2.5rem;
+        margin: 4rem 0;
       }
-      .hero-section {
+
+      .how-to-start {
+        padding: 2.5rem;
+      }
+
+      .footer-content {
         flex-direction: column;
         text-align: center;
-        padding: 0 20px;
       }
-      .hero-content {
-        padding-left: 0;
-        margin-top: 30px;
+
+      .steps li {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
       }
-      .hero-title {
-        font-size: 2.8em;
+
+      .steps li:hover {
+        transform: translateY(-5px);
+      }
+
+      .features {
+        grid-template-columns: 1fr;
       }
     }
-          .img-gasolino {
-        width: 100%;
-        border-radius: 50%;
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 15px;
       }
-      .footer {
-        background: #000;
-        padding: 40px 0;
-        margin-top: 60px;
-        border-top: 2px solid var(--yellow);
+
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
       }
-      .footer-content {
-        max-width: 1100px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 20px;
-        flex-wrap: wrap;
-        gap: 20px;
+
+      .bot-title {
+        font-size: 1.8rem;
       }
-      .footer-section {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: var(--white);
-        font-size: 1em;
+
+      .hero-content h2 {
+        font-size: 2.2rem;
       }
-      .footer-icon {
-        font-size: 1.2em;
-        color: var(--white);
-        transition: color 0.3s ease;
+
+      .chat-section,
+      .how-to-start {
+        padding: 2rem;
       }
-      .footer-link {
-        text-decoration: none;
-        color: var(--white);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        transition: color 0.3s ease;
+
+      .section-title {
+        font-size: 2.2rem;
       }
-      .footer-link:hover {
-        color: var(--yellow);
-      }
-      .footer-link:hover .footer-icon {
-        color: var(--yellow);
-      }
-      @media (max-width: 768px) {
-        .footer-content {
-          flex-direction: column;
-          text-align: center;
-          gap: 30px;
-        }
-      }
-    </style>
-  </head>
+    }
+  </style>
+</head>
 <body>
-  <div class="hero-section">
-    <div class="hero-image">
-      <!-- Aquí puedes colocar la imagen del móvil con Telegram abierto -->
-      <img src="telegram_phone1.png" alt="Móvil con Telegram abierto" />
-    </div>
-    <div class="hero-content">
-      <div class="header">
-        <h1 class="hero-title">Gasolino</h1>
-        <div class="logo-placeholder"><img src="gasolino.png" class="img-gasolino" alt="Gasolino"></div>
+  <!-- Schema.org structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Gasolino",
+    "description": "Bot de Telegram para controlar el consumo mensual de gasolina",
+    "url": "https://gasolino.com/",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Telegram",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "COP"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Andres Silva",
+      "url": "http://www.linkedin.com/in/andres-silva-vega-silva-b48016a6"
+    },
+    "creator": {
+      "@type": "Person",
+      "name": "Andres Silva"
+    }
+  }
+  </script>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo-section">
+                  <div class="logo">
+          <img src="./gasolino.png" alt="Logo de Gasolino - Bot de Telegram para control de gasolina">
+        </div>
+          <h1 class="bot-title">Gasolino</h1>
+        </div>
       </div>
-      
-      <p class="hero-subtitle">Controla tu consumo de gasolina de forma inteligente y sencilla con nuestro bot de Telegram</p>
     </div>
-  </div>
-  <div class="container">
-    <div class="left">
-      <div class="telegram-chat">
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-image">
+        <img src="./telegram_phone1.png" alt="Telegram en móvil mostrando el bot Gasolino">
+      </div>
+    </div>
+    <div class="container">
+      <div class="hero-content">
+        <h2>Controla tu consumo de gasolina de forma inteligente</h2>
+        <p>Gasolino es tu asistente en Telegram para llevar el control mensual de tu consumo de gasolina. Registra cada tanqueo en lenguaje natural y obtén resúmenes detallados de tus gastos.</p>
+        <a href="#chat" class="cta-button">Ver Demo del Chat</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="content-section">
+    <div class="container">
+      <div class="features">
+        <article class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-chat-dots"></i>
+          </div>
+          <h3 class="feature-title">Lenguaje Natural</h3>
+          <p class="feature-description">Escribe como si estuvieras hablando con un amigo. No necesitas comandos especiales.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-graph-up"></i>
+          </div>
+          <h3 class="feature-title">Control Mensual</h3>
+          <p class="feature-description">Lleva un registro detallado de todos tus gastos en gasolina mes a mes.</p>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon">
+            <i class="bi bi-phone"></i>
+          </div>
+          <h3 class="feature-title">Fácil Acceso</h3>
+          <p class="feature-description">Usa el bot desde cualquier dispositivo con Telegram instalado.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chat Section -->
+  <section id="chat" class="chat-section">
+    <div class="container">
+      <h2 class="section-title">¿Cómo funciona?</h2>
+      <p class="description">
+        Gasolino es tu asistente en Telegram para llevar el control mensual de tu consumo de gasolina. 
+        Registra cada vez que tanqueas simplemente escribiendo en lenguaje natural el tipo de vehículo, 
+        la cantidad de gasolina en galones y el precio que pagaste. Luego, consulta tu gasto mensual 
+        y recibe un resumen claro y sencillo.
+      </p>
+      
+      <div class="chat-container">
         <div class="chat-header">
-          <div class="chat-header-text"><div class="chat-header-avatar">
-            <img src="gasolino.png" class="img-gasolino" alt="Gasolino">
-          </div>Gasolino Bot
+                  <div class="chat-avatar">
+          <img src="./gasolino.png" alt="Logo del bot Gasolino en Telegram">
         </div>
-      </div>
+          <div class="chat-title">Gasolino Bot</div>
+        </div>
         <div class="chat-messages">
-          <!-- Aquí puedes agregar burbujas de chat hardcoreadas -->
-          <div class="chat-bubble from-user">¡Hola Gasolino! Hoy he tanqueado mi carro con 3 galones por 60000 pesos.</div>
-          <div class="chat-bubble from-bot">¡Claro! Tu registro ha sido guardado</div>
-          <div class="chat-bubble from-user">He puesto a mi moto, 2.5 galones por 15000</div>
-          <div class="chat-bubble from-bot">¡Listo! Tu registro ha sido guardado</div>
-          <div class="chat-bubble from-user">¿Cuánto he gastado este mes?</div>
-          <div class="chat-bubble from-bot">✅ Has gastado así:<br>🚗 Total carro: 3 galones por $60000<br>🛵 Total moto: 2.5 galones por $15000<br>💰 Total: 5.5 galones por $75000</div>
+          <!-- Mensajes hardcoreados del chat -->
+          <div class="message user">¡Hola! Hoy tanqueé mi carro con 3 galones por $60.000</div>
+          <div class="message bot">¡Perfecto! Registro guardado</div>
+          <div class="message user">He puesto a mi moto, 2.5 galones por 15000</div>
+          <div class="message bot">Listo! Registro guardado</div>
+          <div class="message user">¿Cuánto he gastado?</div>
+          <div class="message bot">✅ Has gastado así:<br>
+            🛵 Moto: 8.35 galones por $ 55.500,00. Tanqueadas: 2<br>
+            🚗 Carro: 2.50 galones por $ 30.000,00. Tanqueadas: 1<br>
+            <br>
+            🧾 Total del mes:<br>
+            ⛽ Tanqueadas: 3<br>
+            🧃 Galones: 10.85<br>
+            💰 $ 85.500,00</div>
         </div>
       </div>
     </div>
-    <div class="right">
-      
-      <div class="description">
-        Gasolino es tu asistente en Telegram para llevar el control mensual de tu consumo de gasolina. <br>
-        Registra cada vez que tanqueas simplemente escribiendo en lenguaje natural el tipo de vehículo, la cantidad de gasolina en galones y el precio que pagaste. <br>
-        Luego, consulta tu gasto mensual y recibe un resumen claro y sencillo.
+  </section>
+
+  <!-- How to Start Section -->
+  <section class="content-section">
+    <div class="container">
+      <div class="how-to-start">
+        <h3 class="section-title" style="margin-bottom: 3rem;">¿Cómo empezar?</h3>
+        <ol class="steps">
+          <li>
+            <div class="step-number"></div>
+            <div class="step-content">Descarga Telegram en tu dispositivo móvil o computadora</div>
+          </li>
+          <li>
+            <div class="step-number"></div>
+            <div class="step-content">Busca el chat <a href="https://t.me/userGasolinoReports_bot" title="Ir al bot de Gasolino en Telegram"><strong>Gasolino</strong></a> en Telegram</div>
+          </li>
+          <li>
+            <div class="step-number"></div>
+            <div class="step-content">Haz clic en <strong>Iniciar</strong> para comenzar a usar el bot</div>
+          </li>
+          <li>
+            <div class="step-number"></div>
+            <div class="step-content">Empieza a registrar y consultar tu consumo de gasolina en lenguaje natural</div>
+          </li>
+        </ol>
       </div>
-      <div class="section-title">¿Cómo empezar?</div>
-      <ul class="steps">
-        <li><span class="step-number">1</span>Descarga Telegram en tu dispositivo móvil o computadora.</li>
-        <li><span class="step-number">2</span>
-          <div>
-            Busca el chat&nbsp;<strong>Gasolino_bot <i class="bi bi-telegram footer-icon"></i></strong>&nbsp;en Telegram.
-          </div>
-        </li>
-        <li><span class="step-number">3</span>
-          <div>
-            Haz clic en &nbsp;<b>Iniciar</b>&nbsp; para comenzar a usar el bot.
-          </div>
-        </li>
-        <li><span class="step-number">4</span>Empieza a registrar y consultar tu consumo de gasolina en lenguaje natural.</li>
-      </ul>
     </div>
-  </div>
-  
+  </section>
+  </main>
+
+  <!-- Footer -->
   <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section">Desarrollado por: 
-        <a href="http://www.linkedin.com/in/andres-silva-vega-silva-b48016a6" target="_blank" class="footer-link">
-          <span>Andres Silva</span>
-          <i class="bi bi-linkedin footer-icon"></i>
-        </a>
-      </div>
-      
-      <div class="footer-section">
-        <a href="mailto:soporte@gasolino.com" class="footer-link">
-          <span>Soporte</span>
-          <i class="bi bi-envelope footer-icon"></i>
-        </a>
-      </div>
-      
-      <div class="footer-section">
-        <a href="https://t.me/userGasolinoReports_bot" target="_blank" class="footer-link">
-          <i class="bi bi-telegram footer-icon"></i>
-          <span>@Gasolino_bot</span>
-        </a>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <span>Desarrollado por: </span>
+          <a href="http://www.linkedin.com/in/andres-silva-vega-silva-b48016a6" target="_blank" class="footer-link">
+            <span>Andres Silva</span>
+            <i class="bi bi-linkedin footer-icon"></i>
+          </a>
+        </div>
+        
+        <div class="footer-section">
+          <a href="mailto:elandrew2000@hotmail.com" class="footer-link">
+            <span>Soporte</span>
+            <i class="bi bi-envelope footer-icon"></i>
+          </a>
+        </div>
+        
+        <div class="footer-section">
+          <a href="https://t.me/userGasolinoReports_bot" target="_blank" class="footer-link">
+            <i class="bi bi-telegram footer-icon"></i>
+            <span>@Gasolino_bot</span>
+          </a>
+        </div>
       </div>
     </div>
   </footer>
