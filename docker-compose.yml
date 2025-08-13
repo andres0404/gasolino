@@ -48,13 +48,13 @@ services:
       postgres:
         condition: service_healthy
 
-  ollama:
-    image: ollama/ollama
-    volumes:
-      - .ollama:/root/.ollama
-    container_name: ollama
-    ports:
-      - "11434:11434"
+  #ollama:
+  #  image: ollama/ollama
+  #  volumes:
+  #    - .ollama:/root/.ollama
+  #  container_name: ollama
+  #  ports:
+  #    - "11434:11434"
 
 
   nginx-proxy-manager:
