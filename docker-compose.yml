@@ -26,6 +26,10 @@ services:
     ports:
       - "8080:8080"
 
+  n8n_redis:
+    image: redis:8.2.1-alpine
+    restart: unless-stopped
+
   n8n:
     image: docker.n8n.io/n8nio/n8n
     restart: always
@@ -38,6 +42,11 @@ services:
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_NON_ROOT_PASSWORD}
       - WEBHOOK_TUNNEL_URL=${WEBHOOK_TUNNEL_URL}
       - WEBHOOK_URL=${WEBHOOK_TUNNEL_URL}
+      #- N8N_SECURE_COOKIE=false 
+      - N8N_PORT
+      - N8N_HOST
+      - N8N_EXECUTIONS_MODE=queue
+      - QUEUE_BULL_REDIS_HOST=n8n_redis
     ports:
       - 5678:5678
     links:
@@ -47,6 +56,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+  
+  n8n_worker:
+    image: docker.n8n.io/n8nio/n8n
+    restart: unless-stopped
+    environment:
+      - N8N_EXECUTIONS_MODE=queue
+      - QUEUE_BULL_REDIS_HOST=redis
+    depends_on:
+      - n8n_redis
 
   #ollama:
   #  image: ollama/ollama
