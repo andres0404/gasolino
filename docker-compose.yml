@@ -12,6 +12,8 @@ services:
       - POSTGRES_DB
       - POSTGRES_NON_ROOT_USER
       - POSTGRES_NON_ROOT_PASSWORD
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
     volumes:
       - db_storage:/var/lib/postgresql/data
       - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
@@ -42,6 +44,7 @@ services:
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_NON_ROOT_PASSWORD}
       - WEBHOOK_TUNNEL_URL=${WEBHOOK_TUNNEL_URL}
       - WEBHOOK_URL=${WEBHOOK_TUNNEL_URL}
+      - N8N_RUNNERS_ENABLED=true
       #- N8N_SECURE_COOKIE=false 
       - N8N_PORT
       - N8N_HOST
@@ -61,8 +64,8 @@ services:
     image: docker.n8n.io/n8nio/n8n
     restart: unless-stopped
     environment:
-      - N8N_EXECUTIONS_MODE=queue
-      - QUEUE_BULL_REDIS_HOST=redis
+      - N8N_EXECUTIONS_MODE=worker
+      - QUEUE_BULL_REDIS_HOST=n8n_redis
     depends_on:
       - n8n_redis
 
