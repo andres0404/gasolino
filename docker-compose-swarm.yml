@@ -1,0 +1,123 @@
+volumes:
+  db_storage:
+  n8n_storage:
+
+services:
+  postgres:
+    image: postgres:16.10-alpine3.22
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        window: 300s
+    env_file:
+      - .env_postgres
+    volumes:
+      - db_storage:/var/lib/postgresql/data
+      - ./init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -h 127.0.0.1 -U postgres -d n8n']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - net_gasolino_flujo
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - net_gasolino_flujo
+
+  n8n_redis:
+    image: redis:8.2.1-alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 4
+        window: 300s
+    networks:
+      - net_gasolino_flujo
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+    env_file:
+      - .env_n8n
+    ports:
+      - 5678:5678
+    links:
+      - postgres
+    volumes:
+      - n8n_storage:/home/node/.n8n
+    networks:
+      - net_gasolino_flujo
+  
+  n8n_worker:
+    image: docker.n8n.io/n8nio/n8n
+    deploy:
+      replicas: 4
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+    environment:
+      - N8N_EXECUTIONS_MODE=worker
+      - QUEUE_BULL_REDIS_HOST=n8n_redis
+      - N8N_RUNNERS_ENABLED=true
+    depends_on:
+      - n8n_redis
+    networks:
+      - net_gasolino_flujo
+
+
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - '80:80'
+      - '443:443'
+      - '81:81'
+      - '8000:8000'
+      - '8001:8001'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - net_gasolino_landing
+
+      
+  landing-page:
+    image: nginx:alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - ./landing-page:/usr/share/nginx/html
+    networks:
+      - net_gasolino_landing
+
+networks:
+  net_gasolino_flujo:
+    driver: overlay
+  net_gasolino_landing:
+    driver: overlay
