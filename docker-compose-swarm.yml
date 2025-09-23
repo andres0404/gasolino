@@ -55,6 +55,8 @@ services:
         window: 120s
     env_file:
       - .env_n8n
+    environment:
+      - N8N_EXECUTIONS_MODE=queue
     ports:
       - 5678:5678
     links:
@@ -76,10 +78,11 @@ services:
         delay: 10s
         max_attempts: 3
         window: 120s
+    env_file:
+      - .env_n8n
     environment:
       - N8N_EXECUTIONS_MODE=worker
       - QUEUE_BULL_REDIS_HOST=n8n_redis
-      - N8N_RUNNERS_ENABLED=true
     depends_on:
       - n8n_redis
     networks:
