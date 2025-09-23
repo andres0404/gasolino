@@ -106,6 +106,7 @@ services:
       - ./letsencrypt:/etc/letsencrypt
     networks:
       - net_gasolino_landing
+      - net_gasolino_flujo
 
       
   landing-page:
